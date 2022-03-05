@@ -41,7 +41,6 @@ int main() {
 		}
 	}
 		while (ends.empty()==0){
-		
 		current_alive-=1;
 		if (current_alive == 2){
 			std::cout << set_start << " "<< *ends.begin() << endl;
