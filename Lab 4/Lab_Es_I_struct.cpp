@@ -17,7 +17,7 @@ struct city_struct {
 };
 
 
-bool orientation(long long int k,std::vector< forw_list > road,std::vector< city_struct > cities){
+bool orientation(const long long int & k,const std::vector< forw_list > & road,const std::vector< city_struct > & cities){
 	city_struct next_city = cities[road[k].next];
 	city_struct prev_city = cities[road[k].prev];
 	city_struct current_city = cities[k];
