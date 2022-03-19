@@ -4,21 +4,20 @@
 #include <vector>
 #include <map>
 #include <set>
-using namespace std;
 
-struct forw_list {
+struct neighbors {
 	long long int nei_1 = -1LL;
 	long long int nei_2 = -1LL;
 };
 
 struct city_struct {
-	string name;
+	std::string name;
 	long long int x;
 	long long int y;
 };
 
 //per cercare l'orientamento uso la citta nell angolo che sicuro e parte della strada
-bool orientation(const long long int & k,const std::vector< forw_list > & road,const std::vector< city_struct > & cities){
+bool orientation(const long long int & k,const std::vector< neighbors > & road,const std::vector< city_struct > & cities){
 	city_struct next_city = cities[road[k].nei_1];
 	city_struct prev_city = cities[road[k].nei_2];
 	city_struct current_city = cities[k];
@@ -37,7 +36,7 @@ int main() {
 	std::cin >> m >> n;
 	std::map< std::pair<long long int,long long int>,long long int > links;
 	std::vector< city_struct > cities(m);
-	string name;
+	std::string name;
 	long long int x,y,z;
 	//carico le citta
 	for (long long int i = 0;i<m;++i){
@@ -76,17 +75,17 @@ int main() {
 		links[{y,z}]+=1LL; 
 	 	}
 
-	std::vector< forw_list > road(m);
+	std::vector< neighbors > road(m);
 	long long int start,first,end,prev;
 
-	std::multiset<pair<string,long long int>> visited_cities;
-	tuple<string,long long int> visited_city;
+	std::multiset<std::pair<std::string,long long int>> visited_cities;
+	std::pair<std::string,long long int> visited_city;
 
 	//colleziono i link delle citta che hanno solo 1 territorio comune e credo una lista di start->end
 	for (std::map<std::pair<long long int,long long int>,long long int>::iterator it = links.begin();it!=links.end(); ++it){
 	 	if(it->second==1LL){
-			start = get<0>(it->first);
-			end = get<1>(it->first);
+			start = std::get<0>(it->first);
+			end = std::get<1>(it->first);
 			//std::cout << start+1 << " " <<end+1;
 			if (road[start].nei_1==-1LL) {
 				road[start].nei_1 = end;
@@ -98,10 +97,8 @@ int main() {
 			} else {
 				road[end].nei_2 = start;
 			}
-			visited_city = make_tuple(cities[end].name,end);
-			visited_cities.insert(visited_city);
-			visited_city = make_tuple(cities[start].name,start);
-			visited_cities.insert(visited_city);
+			visited_cities.insert({cities[end].name,end});
+			visited_cities.insert({cities[start].name,start});
 			
 		}
 	
@@ -109,10 +106,8 @@ int main() {
 	}
 	bool ori = orientation(corner_city_index,road,cities);
 	
-
-
 	//prendo la prima citta in ordine alfabetico e poi giro orario o antiorario a dipendenza del cross
-	first = get<1>(*(visited_cities.begin()));
+	first = std::get<1>(*(visited_cities.begin()));
 	start = corner_city_index;
 	if (ori){
 	end = road[start].nei_1;
@@ -130,11 +125,11 @@ int main() {
 
 	while (end!=first){
 		prev = start;
-		std::cout << cities[start].name << endl;
+		std::cout << cities[start].name << std::endl;
 		start = end;
 		end = road[end].nei_1+road[end].nei_2-prev;
 	}
-	std::cout << cities[start].name << endl;	
+	std::cout << cities[start].name << std::endl;	
 	
 	return 0;
 }
