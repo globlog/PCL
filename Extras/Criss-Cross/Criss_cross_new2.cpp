@@ -12,11 +12,13 @@ long long unsigned int abs_dist(std::pair<long long int,long long int> point1, s
     return std::llabs(std::get<0>(point1)-std::get<0>(point2))+std::llabs(std::get<1>(point1)-std::get<1>(point2));
 }
 
-bool sign_or_zero(long long int a,long long int b){
-    if (((a>=0) & (b>=0)) || ((a<=0) && (b<=0))){
-        return true;
+int sign_or_zero(long long int a,long long int b){
+    if ((a>=0) & (b>=0)){
+        return 1;
+    } else if   ((a<=0) && (b<=0)){
+        return -1;
     } else {
-        return false;
+        return 0;
     }
 }
 
@@ -30,7 +32,7 @@ int is_between_frac(std::pair<long long int,long long int> endpoint1,std::pair<l
     dis_x = std::get<1>(fracpoint);
     y_norm = std::get<2>(fracpoint);
     dis_y = std::get<3>(fracpoint);
-    if (sign_or_zero(x1*dis_x-x_norm,x_norm-x2*dis_x) && sign_or_zero(y1*dis_y-y_norm,y_norm-y2*dis_y)){
+    if (sign_or_zero(x1*dis_x-x_norm,x_norm-x2*dis_x) * sign_or_zero(y1*dis_y-y_norm,y_norm-y2*dis_y) == 1){
         return 1;
     } else {
         return 0;
@@ -119,7 +121,7 @@ int main (){
                     typus2 = is_between(point3,point4,point2);
                     typus3 = is_between(point1,point2,point3);
                     typus4 = is_between(point1,point2,point4);
-                    std:: cout << typus1 << typus2 << typus3 << typus4;
+                    //std:: cout << typus1 << typus2 << typus3 << typus4;
                     if (typus1 == -1 || typus2 == -1 || typus3 == -1 || typus4 == -1 || (typus3 == 1 && typus4 == 1)){
                         std::cout << -1 << std::endl;
                         return 0;
