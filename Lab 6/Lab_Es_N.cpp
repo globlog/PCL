@@ -19,7 +19,7 @@ int max_common_length(std::string prefix, std::string word){
 }
 
 
- std::vector<std::pair<int,int>> substring_matcher(std::string word){
+std::vector<std::pair<int,int>> substring_matcher(std::string word){
  	std::vector<std::pair<int,int>> matches;
 	std::pair<int,int> zero_one;
 	std::string add_zero,add_one;
