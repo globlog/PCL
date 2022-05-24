@@ -18,8 +18,23 @@ int main() {
 		std::map<int,long unsigned int> railroads[N+1];
 		for (int j =0;j<M;++j){
 			std::cin >> a >> b >> l;
-			railroads[a].insert({b,l});
-			railroads[b].insert({a,l});
+			
+			it = railroads[a].find(b)
+			if (it==railroads[a].end()){
+				railroads[a].insert({b,l});
+			} else {
+				it->second = std::min(it->second,l)
+			}
+
+			it = railroads[b].find(a)
+			if (it==railroads[b].end()){
+				railroads[b].insert({a,l});
+			} else {
+				it->second = std::min(it->second,l)
+			}
+
+			
+			
 		}
 		for(int i =1;i<N+1;++i){
 			if (railroads[i].size()==2){

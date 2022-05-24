@@ -40,7 +40,7 @@ int main(){
 	bool found = true;
 	while (y<10){
 		if (y*a == y*b){
-			std::cout << y;
+			std::cout << y << std::endl;
 			found = false;
 		}
 		y+=b;

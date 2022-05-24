@@ -1,0 +1,14 @@
+\documentclass[a4paper]{article}
+\usepackage{amsmath}
+\begin{document}
+.\\
+L'esercizio equivale a rsiovlere l'equazione
+ $$x\,\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\cdot \frac{a}{b}=\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\, x\iff x\,\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\cdot a=\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\, x\cdot b$$
+Ora ponendo $\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace=y$ di $n$ cifre otteniamo
+$$x\,\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace=x\cdot 10^n+y\qquad y<10^n$$
+e allo stessso modo
+$$\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\textvisiblespace\, x=10\cdot y+x$$
+così l'equazione iniziale diventa
+$$(x10^n+y)\cdot a=(10y+x)\cdot b\iff y=\frac{x10^na-bx}{10b-a}$$
+esploro ora lo spazio delle $n\in\{0,\dots,8\}$ e $x\in\{1,\dots,9\}$ ed è risolto.
+\end{document}
