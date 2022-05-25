@@ -6,72 +6,143 @@
 #include <map>
 #include <algorithm>
 
+
+
 int main() {
-	int T,N,M;
+	int T,N,M,next,current;
 	int a,b;
 	long unsigned int l,ll;
 	std::cin >> T;
 	int startpoint,endpoint;
-	std::map<int,long unsigned int>::iterator it,at;
+	std::multimap<int,std::pair<long unsigned int,bool>>::iterator it,at,ut;
 	for (int i = 0;i<T;++i){
+        std::multiset<std::tuple<int,int,long unsigned int>> paths;
 		std::cin >> N >> M;
-		std::map<int,long unsigned int> railroads[N+1];
+		std::multimap<int,std::pair<long unsigned int,bool>> railroads[2*N+1];
 		for (int j =0;j<M;++j){
 			std::cin >> a >> b >> l;
-			
-			it = railroads[a].find(b)
-			if (it==railroads[a].end()){
-				railroads[a].insert({b,l});
-			} else {
-				it->second = std::min(it->second,l)
-			}
-
-			it = railroads[b].find(a)
-			if (it==railroads[b].end()){
-				railroads[b].insert({a,l});
-			} else {
-				it->second = std::min(it->second,l)
-			}
-
-			
-			
+            if (a!=b){
+			railroads[a].insert({b,{l,true}});
+			railroads[b].insert({a,{l,true}});
+            }
+            else {
+            railroads[a].insert({N+a,{l,true}});
+			railroads[N+a].insert({a,{l,true}});
+            railroads[N+a].insert({N+a,{0,true}});
+            railroads[a].insert({N+a,{0,true}});
+            }
 		}
 		for(int i =1;i<N+1;++i){
-			if (railroads[i].size()==2){
-				ll = 0;
-				it = railroads[i].begin();
-				ll += it->second;
-				startpoint = it->first; 
-				++it;
-				ll+= it->second;
-				endpoint = it->first;
-				at = railroads[startpoint].find(endpoint);
-				if (at!=railroads[startpoint].end()){
-					at->second = ll;
-				} else {
-					railroads[startpoint].insert({endpoint,ll});
-				}
-				//at = railroads[startpoint].find(i);
-  				//railroads[startpoint].erase(at);  
+            ll = 0;
+            startpoint = i;
 
-				at = railroads[endpoint].find(startpoint);
-				if (at!=railroads[endpoint].end()){
-					at->second = ll;
-				} else {
-					railroads[endpoint].insert({startpoint,ll});
-				}
-				//at = railroads[endpoint].find(i);
-  				//railroads[endpoint].erase(at);
-				
-				
-			}
+            if (railroads[i].size() == 2){
+                ut = railroads[i].begin();
+                if ((ut->second).second){
+                    ll = 0;
+                    current = startpoint;
+                    next = ut->first;
+                    (ut->second).second = false;
+                    while (railroads[next].size() == 2 && next != startpoint){
+                        it = railroads[next].begin();
+                        at = ++(railroads[next].begin());
+                        (it->second).second = false;
+                        (at->second).second = false;
+                        if (it->first == current){
+                            ll+=(it->second).first;
+                            current = next;
+                            next = at->first;
+                        } else {
+                            ll+=(at->second).first;
+                            current = next;
+                            next = it->first;
+                        }
+                    }
+                    it = railroads[next].find(current);
+                    while((it->second).second == false){
+                            ++it;
+                        }
+                    ll+=(it->second).first;
+                    (it->second).second = false;
+                    a = startpoint;
+                    b = next;
+                    if (next != startpoint){
+                        ++ut;
+                        current = startpoint;
+                        next = ut->first;
+                        (ut->second).second = false;
+                    while (railroads[next].size() == 2 && next != startpoint){
+                        it = railroads[next].begin();
+                        at = ++(railroads[next].begin());
+                        (it->second).second = false;
+                        (at->second).second = false;
+                        if (it->first == current){
+                            ll+=(it->second).first;
+                            current = next;
+                            next = at->first;
+                        } else {
+                            ll+=(at->second).first;
+                            current = next;
+                            next = it->first;
+                        }
+                    }
+                    it = railroads[next].find(current);
+                    while((it->second).second == false){
+                            ++it;
+                        }
+                    ll+=(it->second).first;
+                    (it->second).second = false;
+                    }
+                    a = next;
+                    //std::cout << std::min(a,b) << " " << std::max(a,b) << " " << ll << std::endl;
+                    paths.insert(std::make_tuple(std::min(a,b),std::max(a,b),ll));
+
+                }
+
+            } else {
+                for (ut = railroads[i].begin(); ut != railroads[i].end() ;ut++){
+                    //std::cout << (ut->second).second << " " << i << " " << (ut->first) << "ut" << std::endl;
+                    if ((ut->second).second){
+                        ll = 0;
+                        current = startpoint;
+                        next = ut->first;
+                        (ut->second).second = false;
+                        while (railroads[next].size() == 2 && next != startpoint){
+                            it = railroads[next].begin();
+                            at = ++(railroads[next].begin());
+                            (it->second).second = false;
+                            (at->second).second = false;
+                            if (it->first == current){
+                                ll+=(it->second).first;
+                                current = next;
+                                next = at->first;
+                            } else {
+                                ll+=(at->second).first;
+                                current = next;
+                                next = it->first;
+                            }
+                        }
+                        it = railroads[next].find(current);
+                        while((it->second).second == false){
+                            ++it;
+                        }
+                        ll+=(it->second).first;
+                        (it->second).second = false;
+                        // it = railroads[i].find(i);
+                        // if (it != railroads[i].end()){
+                        //     ll+=(it->second).first;
+                        //     (it->second).second = false;
+                        // }
+                        //std::cout << i << " " << next << " " << ll << std::endl; 
+                        paths.insert(std::make_tuple(std::min(i,next),std::max(i,next),ll));
+                    }
+                }
+            }   
 		}
-		for(int i =1;i<N+1;++i){
-			for (it = railroads[i].begin(); it != railroads[i].end() ;it++){
-				std::cout << i << " " << it->first << " " << it->second << std::endl; 
-			}
-			
-		}
+        std::cout << paths.size() << std::endl;
+        for (std::multiset<std::tuple<int,int,long unsigned int>>::iterator it = paths.begin();it !=paths.end();++it){
+            std::cout << std::get<0>(*it) << " " << std::get<1>(*it) << " " << std::get<2>(*it) << std::endl; 
+        }
 	}
 	
 	return 0;
