@@ -6,6 +6,34 @@
 #include <map>
 #include <algorithm>
 
+int move(long unsigned int & ll,int startpoint,std::multimap<int,std::pair<long unsigned int,bool>>::iterator ut,std::multimap<int,std::pair<long unsigned int,bool>> * railroads){ 
+    std::multimap<int,std::pair<long unsigned int,bool>>::iterator it,at;
+    int current = startpoint;
+    int next = ut->first;
+    (ut->second).second = false;
+    while (railroads[next].size() == 2 && next != startpoint){
+        it = railroads[next].begin();
+        at = ++(railroads[next].begin());
+        (it->second).second = false;
+        (at->second).second = false;
+        if (it->first == current){
+            ll+=(it->second).first;
+            current = next;
+            next = at->first;
+        } else {
+            ll+=(at->second).first;
+            current = next;
+            next = it->first;
+        }
+    }
+    it = railroads[next].find(current);
+    while((it->second).second == false){
+            ++it;
+        }
+    ll+=(it->second).first;
+    (it->second).second = false;
+    return next;
+}
 
 
 int main() {
@@ -40,100 +68,21 @@ int main() {
                 ut = railroads[i].begin();
                 if ((ut->second).second){
                     ll = 0;
-                    current = startpoint;
-                    next = ut->first;
-                    (ut->second).second = false;
-                    while (railroads[next].size() == 2 && next != startpoint){
-                        it = railroads[next].begin();
-                        at = ++(railroads[next].begin());
-                        (it->second).second = false;
-                        (at->second).second = false;
-                        if (it->first == current){
-                            ll+=(it->second).first;
-                            current = next;
-                            next = at->first;
-                        } else {
-                            ll+=(at->second).first;
-                            current = next;
-                            next = it->first;
-                        }
-                    }
-                    it = railroads[next].find(current);
-                    while((it->second).second == false){
-                            ++it;
-                        }
-                    ll+=(it->second).first;
-                    (it->second).second = false;
+                    next = move(ll,startpoint,ut,railroads);
                     a = startpoint;
                     b = next;
                     if (next != startpoint){
                         ++ut;
-                        current = startpoint;
-                        next = ut->first;
-                        (ut->second).second = false;
-                    while (railroads[next].size() == 2 && next != startpoint){
-                        it = railroads[next].begin();
-                        at = ++(railroads[next].begin());
-                        (it->second).second = false;
-                        (at->second).second = false;
-                        if (it->first == current){
-                            ll+=(it->second).first;
-                            current = next;
-                            next = at->first;
-                        } else {
-                            ll+=(at->second).first;
-                            current = next;
-                            next = it->first;
-                        }
-                    }
-                    it = railroads[next].find(current);
-                    while((it->second).second == false){
-                            ++it;
-                        }
-                    ll+=(it->second).first;
-                    (it->second).second = false;
+                        next = move(ll,startpoint,ut,railroads);
                     }
                     a = next;
-                    //std::cout << std::min(a,b) << " " << std::max(a,b) << " " << ll << std::endl;
                     paths.insert(std::make_tuple(std::min(a,b),std::max(a,b),ll));
-
-                }
-
+                } 
             } else {
                 for (ut = railroads[i].begin(); ut != railroads[i].end() ;ut++){
-                    //std::cout << (ut->second).second << " " << i << " " << (ut->first) << "ut" << std::endl;
                     if ((ut->second).second){
                         ll = 0;
-                        current = startpoint;
-                        next = ut->first;
-                        (ut->second).second = false;
-                        while (railroads[next].size() == 2 && next != startpoint){
-                            it = railroads[next].begin();
-                            at = ++(railroads[next].begin());
-                            (it->second).second = false;
-                            (at->second).second = false;
-                            if (it->first == current){
-                                ll+=(it->second).first;
-                                current = next;
-                                next = at->first;
-                            } else {
-                                ll+=(at->second).first;
-                                current = next;
-                                next = it->first;
-                            }
-                        }
-                        it = railroads[next].find(current);
-                        while((it->second).second == false){
-                            ++it;
-                        }
-                        ll+=(it->second).first;
-                        (it->second).second = false;
-                        // it = railroads[i].find(i);
-                        // if (it != railroads[i].end()){
-                        //     ll+=(it->second).first;
-                        //     (it->second).second = false;
-                        // }
-                        //std::cout << i << " " << next << " " << ll << std::endl; 
+                        next =  move(ll,startpoint,ut,railroads);
                         paths.insert(std::make_tuple(std::min(i,next),std::max(i,next),ll));
                     }
                 }
